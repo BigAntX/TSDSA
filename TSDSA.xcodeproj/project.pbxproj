@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C750742B1B9084AD00AC7941 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = C750742A1B9084AD00AC7941 /* README.md */; };
+		C7293C661B934FC00038DDE0 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7293C651B934FC00038DDE0 /* list.cpp */; settings = {ASSET_TAGS = (); }; };
+		C77EF9AA1B90943B00C09A0F /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = C77EF9A91B90943B00C09A0F /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +24,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C7293C651B934FC00038DDE0 /* list.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = list.cpp; sourceTree = SOURCE_ROOT; };
 		C75074201B90849A00AC7941 /* TSDSA */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TSDSA; sourceTree = BUILT_PRODUCTS_DIR; };
-		C750742A1B9084AD00AC7941 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C77EF9A91B90943B00C09A0F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +43,7 @@
 		C75074171B90849A00AC7941 = {
 			isa = PBXGroup;
 			children = (
+				C77EF9A91B90943B00C09A0F /* README.md */,
 				C75074221B90849A00AC7941 /* TSDSA */,
 				C75074211B90849A00AC7941 /* Products */,
 			);
@@ -57,7 +60,7 @@
 		C75074221B90849A00AC7941 /* TSDSA */ = {
 			isa = PBXGroup;
 			children = (
-				C750742A1B9084AD00AC7941 /* README.md */,
+				C7293C651B934FC00038DDE0 /* list.cpp */,
 			);
 			path = TSDSA;
 			sourceTree = "<group>";
@@ -118,7 +121,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C750742B1B9084AD00AC7941 /* README.md in Sources */,
+				C77EF9AA1B90943B00C09A0F /* README.md in Sources */,
+				C7293C661B934FC00038DDE0 /* list.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +239,7 @@
 				C75074291B90849A00AC7941 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
