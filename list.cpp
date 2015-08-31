@@ -278,3 +278,20 @@ void List<T>::traverse(VST& visit) {    // 利用函数对象机制遍历，可�
         visit(p->data);
     }
 }
+
+// MARK: 有序列表
+// MARK: 唯一化
+template <typename T>
+int List<T>::uniquify() {   // 剔除有序列表中重复节点（连续操作，效率更高）
+    if (_size < 2) return 0;    // 平凡列表自然无重复
+    int oldSize = _size;
+    ListNodePosi(T) q = first();
+    while (trailer != q->succ) {    // 只要q合法
+        ListNodePosi(T) p = q; q = p->succ; // p和q依次指向紧邻的每对节点
+        if (p->data == q->data) {
+            remove(q);
+            q = p;  // 若雷同删除后者
+        }
+    }
+    return oldSize - _size;
+}
