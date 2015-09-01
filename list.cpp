@@ -295,3 +295,125 @@ int List<T>::uniquify() {   // 剔除有序列表中重复节点（连续操作�
     }
     return oldSize - _size;
 }
+
+// MARK: 查找
+/***************************************************************
+ * 有序列表区间查找算法
+ * 在p（可能是trailer）的n个（真）前驱中，找到不大于e的最后者
+ * 失败时，返回左边界的前驱节点（可能是header）
+ * assert：0 <= n <= rank(p) < _size
+ ***************************************************************/
+template <typename T>
+ListNodePosi(T) List<T>::search(T const& e, int n, ListNodePosi(T) p) const {
+    while (0 <= n--) {  // 对于p的最近n+1个前驱（最左侧的可能是header），从右向左
+        p = p->pred;
+        if (p->data <= e) {
+            break;  // 逐个比较，直至命中、数值越界或范围越界
+        }
+    }
+    return p;   // 同样，header的存在使得处理更为简洁
+}
+
+// MARK: 排序器
+// MARK: 统一接口
+template <typename T>
+void List<T>::sort(ListNodePosi(T) p, int n) {  // 列表区间排序
+    switch (rand()%3) { // 随机选择排序算法。可根据具体问题的特点灵活选取或扩充
+        case 1:
+            insertionSort(p, n);    // 插入排序
+            break;
+        case 2:
+            selectionSort(p, n);    // 选择排序
+            break;
+        default:
+            mergeSort(p, n);        // 归并排序
+            break;
+    }
+}
+
+// MARK: 插入排序
+template <typename T>
+void List<T>::insertionSort(ListNodePosi(T) p, int n) { // valid(p) && rank(p) + n <= size
+    for (int i = 0; i < n; i++) {
+        insertAfter(search(p->data, i, p), p->data); // 查找适当位置并插入
+        p = p->succ;
+        remove(p->pred);    // 转向下一节点
+    }
+}
+
+// MARK: 选择排序
+template <typename T>
+void List<T>::selectionSort(ListNodePosi(T) p, int n) { // 从p起对n个元素做选择排序
+    ListNodePosi(T) head = p->pred;
+    ListNodePosi(T) tail = p;
+    for (int i = 0; i < n; i++) {
+        tail = tail->succ;  // 待排序区间为（head，tail）
+    }
+    while (1 < n) {
+        ListNodePosi(T) max = selectMax(head->succ, n); // 找出最大者（歧义时后者优先）
+        insertBefore(tail, remove(max));    // 将其移至无序区间末尾（作为有序区间新的首元素）
+        tail = tail->pred;
+        n--;
+    }
+    
+}
+
+template <typename T>
+ListNodePosi(T) List<T>::selectMax(ListNodePosi(T) p, int n) {    // 从p的n个后继中选最大者
+    ListNodePosi(T) max = p;    // 最大者暂定为首节点p
+    ListNodePosi(T) cur = p;    // 从首节点p出发
+    for (int i = 1; i < n; i++) {   // 将后续各节点
+        cur = cur->succ;    // 逐一与max做比较
+        if (!lt(cur->data, max->data))  // 若出现更大则
+            max = cur;  // 更新更大者位置记录（注意：若改用比较器lt将不能稳定）
+    }
+    return max;
+}
+
+// MARK: 归并排序
+/***************************************************************
+ * 有序列表的二路归并：将当前列表中自p起的n个元素，与列表L中自q起的m个元素合并
+ * assert: valid(this, p) && rank(p) + n <= size && sorted(this, p, n)
+ *         valid(L, q) && rank(q) + m <= L._size && sorted(L, q, m)
+ * 注意：在归并排序之类的场合，有可能this == L && rank(p) + n = rank(q)
+ ***************************************************************/
+template <typename T>
+void List<T>::merge(ListNodePosi(T)& p, int n, List<T>& L, ListNodePosi(T) q,  int m) {
+    ListNodePosi(T) pp = p->pred;   // 借助前驱（可能是header），以便返回前...
+    while (0 < m) { // 在q尚未移出区间之前
+        if ((0 < n) && (p->data <= q->data)) {  // 若p仍在区间内且v(p) <= v(q),则
+            if (q == (p = p->succ)) {   // 将p直接后移
+                if (q == (p == p->succ)) {
+                    break;
+                }
+                n--;
+            }
+        } else {    // 若p已超出右界或v(q) < v(p),则
+            q = q->succ;
+            insertBefore(p, L.remove(q->pred)); // 将q插至p前
+            m--;
+        }
+    }
+    p = pp->succ;   // 确定归并后区间的（新）起点
+}
+
+// MARK: 分治策略
+/***************************************************************
+ * 列表的归并排序算法：对从位置p起的n个元素排序
+ * 注意：排序后，p依然指向归并后区间的（新）起点
+ ***************************************************************/
+template <typename T>
+void List<T>::mergeSort(ListNodePosi(T)& p, int n) {    // valid(p) && rank(p) + n <= size
+    if (n < 2) {    // 若排序范围已足够小，则
+        return; // 直接返回
+    } else {
+        int m = n >> 1; // 以中点为界
+        ListNodePosi(T) q = p;
+        for (int i = 0; i < m; i++) {   // 均分列表
+            q = q->succ;
+        }
+        mergeSort(p, m);    // 对前半段排序
+        mergeSort(q, n - m);    // 对后半段排序
+        merge(p, m, *this, q, n - m);   // 归并
+    }
+}
